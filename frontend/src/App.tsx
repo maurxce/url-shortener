@@ -8,6 +8,7 @@ type URL = {
 };
 
 function App() {
+  const [url, setUrl] = useState("");
   const [urls, setUrls] = useState([]);
 
   useEffect(() => {
@@ -21,7 +22,7 @@ function App() {
     };
 
     fetchEntries();
-  }, []);
+  }, [url]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,10 +35,7 @@ function App() {
     });
 
     const result = await response.json();
-    const url = `http://localhost:3000/r/${result.shortened}/`;
-
-    const out = document.getElementById("out")!;
-    out.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
+    setUrl(`http://localhost:3000/r/${result.shortened}/`);
   };
 
   return (
@@ -60,10 +58,13 @@ function App() {
             <button type="submit">Short</button>
           </form>
 
-          <small id="out"></small>
+          <small id="out">
+            <a href={url}>{url}</a>
+          </small>
         </article>
 
         <article>
+          <h5>Previously Shortened</h5>
           <table>
             <tr>
               <th>Shortened</th>
