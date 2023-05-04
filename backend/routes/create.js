@@ -7,11 +7,7 @@ const router = express.Router();
 // example.com/create?url=api.example.com
 router.post("/", async (req, res) => {
   let result = await URL.findOne({ original: req.query.url });
-
-  if (result != null) {
-    res.json(result.shortened);
-    return;
-  }
+  if (result != null) return res.json(result.shortened);
 
   let shortened;
   do {
@@ -25,8 +21,7 @@ router.post("/", async (req, res) => {
   });
 
   await entry.save();
-
-  res.json({ shortened });
+  return res.json({ shortened });
 });
 
 export default router;

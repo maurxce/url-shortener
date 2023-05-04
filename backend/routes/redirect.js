@@ -15,7 +15,7 @@ router.get("/:id", async (req, res) => {
     result.save();
   }
 
-  res.redirect(url);
+  return res.redirect(url);
 });
 
 export default router;
