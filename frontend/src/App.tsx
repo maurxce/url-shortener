@@ -12,7 +12,7 @@ function App() {
     });
 
     const result = await response.json();
-    const url = `http://localhost:3000/${result.url}/`;
+    const url = `http://localhost:3000/${result.shortened}/`;
 
     const out = document.getElementById("out")!;
     out.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;

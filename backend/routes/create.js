@@ -6,23 +6,27 @@ const router = express.Router();
 
 // example.com/create?url=api.example.com
 router.post("/", async (req, res) => {
-  let url;
-  const result = await URL.findOne({ original: req.query.url });
-  if (result != null) url = result.shortened;
+  let result = await URL.findOne({ original: req.query.url });
 
-  if (result == null) {
-    const shortened = nanoid(8);
-    url = shortened;
-
-    const entry = new URL({
-      shortened,
-      original: req.query.url,
-    });
-
-    await entry.save();
+  if (result != null) {
+    res.json(result.shortened);
+    return;
   }
 
-  res.json({ url });
+  let shortened;
+  do {
+    shortened = nanoid(8);
+    result = await URL.findOne({ shortened });
+  } while (result != null);
+
+  const entry = new URL({
+    shortened,
+    original: req.query.url,
+  });
+
+  await entry.save();
+
+  res.json({ shortened });
 });
 
 export default router;
