@@ -7,13 +7,13 @@ const router = express.Router();
 // example.com/create?url=api.example.com
 router.post("/", async (req, res) => {
   let result = await URL.findOne({ original: req.query.url });
-  if (result != null) return res.json(result.shortened);
+  if (result) return res.json({ shortened: result.shortened });
 
   let shortened;
   do {
     shortened = nanoid(8);
     result = await URL.findOne({ shortened });
-  } while (result != null);
+  } while (result);
 
   const entry = new URL({
     shortened,
